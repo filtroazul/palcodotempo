@@ -1,0 +1,203 @@
+/* O PALCO DO TEMPO — versao linktree
+   Paleta: cortina vermelha, preto de palco, amarelo de cartaz, papel envelhecido. */
+
+:root {
+  --red:      oklch(0.36 0.14 27);
+  --red-hi:   oklch(0.47 0.17 28);
+  --red-lo:   oklch(0.25 0.10 26);
+  --ink:      oklch(0.15 0.005 50);
+  --paper:    oklch(0.87 0.045 85);
+  --paper-dim: oklch(0.78 0.03 85);
+  --on-paper: oklch(0.2 0.02 40);
+  --yellow:   oklch(0.85 0.17 92);
+
+  --display: 'League Gothic', 'Arial Narrow', Impact, sans-serif;
+  --text:    'Literata', Georgia, serif;
+
+  --gutter: clamp(1.1rem, 5vw, 3rem);
+  --open: 0.14;                  /* largura da cortina aberta (fracao de 50%) */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --z-beam: 1; --z-list: 3; --z-curtain: 5; --z-header: 30; --z-grain: 40;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--ink); color: var(--paper);
+  font: 400 1.0625rem/1.55 var(--text);
+  overflow-x: clip;
+}
+main { overflow-x: clip; }
+img { display: block; max-width: 100%; }
+[hidden] { display: none !important; }
+h1, h2, h3, p { margin: 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.noscript { text-align: center; padding: 2rem 0; }
+
+/* granulado de filme sobre tudo */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: var(--z-grain); pointer-events: none; opacity: 0.09;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+:focus-visible { outline: 3px solid var(--yellow); outline-offset: 4px; }
+.skip { position: fixed; left: 1rem; top: -4rem; z-index: 60; background: var(--yellow); color: var(--ink); padding: .7rem 1rem; font-family: var(--display); font-size: 1.2rem; text-transform: uppercase; }
+.skip:focus { top: 1rem; }
+
+/* ---------- cabecalho ---------- */
+.top {
+  position: fixed; inset: 0 0 auto 0; z-index: var(--z-header);
+  display: flex; align-items: center; padding: .35rem var(--gutter);
+  background: linear-gradient(oklch(0.15 0.005 50 / .85), transparent);
+  transition: background-color .3s;
+}
+.top.is-solid { background: oklch(0.15 0.005 50 / .94); box-shadow: 0 1px 0 oklch(1 0 0 / .08); }
+.top a { color: inherit; text-decoration: none; min-height: 2.75rem; display: inline-flex; align-items: center; }
+.top__brand { font: 1.55rem/1 var(--display); text-transform: uppercase; color: var(--yellow); letter-spacing: .02em; }
+
+/* ---------- cortinas ---------- */
+.curtain {
+  position: absolute; top: 0; bottom: 0; width: 50%; z-index: var(--z-curtain);
+  transform: scaleX(var(--open)); will-change: transform;
+  background:
+    linear-gradient(180deg, oklch(0 0 0 / .6), transparent 24%, transparent 72%, oklch(0 0 0 / .55)),
+    repeating-linear-gradient(90deg, var(--red-lo) 0, var(--red-hi) 2.6rem, var(--red-lo) 5.2rem);
+  box-shadow: 0 0 2.5rem oklch(0 0 0 / .6);
+}
+.curtain--l { left: 0;  transform-origin: left center; }
+.curtain--r { right: 0; transform-origin: right center; }
+.js .stage .curtain { transform: scaleX(1); }          /* fechadas ate o JS abrir */
+.finale .curtain { z-index: 1; }
+
+/* feixes de luz de palco */
+.beam {
+  position: absolute; top: -4%; height: 118%; width: min(90vw, 42rem); z-index: var(--z-beam); pointer-events: none;
+  clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, oklch(0.9 0.14 95 / .30), transparent 78%);
+  transform-origin: 50% 0;
+}
+.beam--l { left: -10%; transform: rotate(-9deg); }
+.beam--r { right: -10%; transform: rotate(9deg); }
+
+/* ---------- botoes ---------- */
+.btn {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: inline-flex; align-items: center; gap: .7rem; min-height: 3.4rem; padding: .7rem 1.5rem;
+  background: var(--yellow); color: var(--ink); text-decoration: none;
+  font: 1.65rem/1 var(--display); text-transform: uppercase; letter-spacing: .03em;
+  transition: color .35s var(--ease);
+}
+.btn::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--red); transform: translateY(101%); transition: transform .45s var(--ease); }
+.btn--ghost { background: transparent; color: var(--paper); box-shadow: inset 0 0 0 2px var(--paper); }
+@media (hover: hover) {
+  .btn:hover { color: var(--paper); }
+  .btn:hover::before { transform: none; }
+}
+
+/* ---------- VIDEOS ---------- */
+.stage {
+  position: relative; overflow: clip; min-height: 100svh;
+  padding: 5.2rem max(var(--gutter), 8%) 5.5rem;
+  background: radial-gradient(ellipse 90% 60% at 50% 105%, oklch(0.3 0.13 26), transparent), var(--ink);
+}
+.acts { position: relative; z-index: var(--z-list); list-style: none; padding: 0; margin: 0 auto; max-width: 40rem; display: grid; gap: clamp(.9rem, 2.2vw, 1.3rem); }
+.act { position: relative; }
+.act__row {
+  position: relative; isolation: isolate; display: grid; grid-template-columns: 5.4rem minmax(0, 1fr) auto; gap: 1rem; align-items: center;
+  padding: 1.05rem 1rem; color: var(--on-paper); text-decoration: none; transition: transform .5s var(--ease);
+}
+.act:nth-child(odd) .act__row { transform: rotate(-.35deg); }
+.act:nth-child(even) .act__row { transform: rotate(.35deg); }
+.act__thumb { position: relative; aspect-ratio: 4/3; overflow: hidden; background: linear-gradient(oklch(0.24 0.03 40), oklch(0.12 0.01 40)); }
+.act__thumb::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 0%, oklch(0.8 0.15 92 / .6), transparent 70%); }
+.act__thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) sepia(.35) contrast(1.08); transition: transform .8s var(--ease); }
+.act__ato { font: 1.25rem/1 var(--display); text-transform: uppercase; letter-spacing: .06em; color: var(--red); }
+.act__title { font: 400 clamp(2rem, 8vw, 3.2rem)/.92 var(--display); text-transform: uppercase; margin-top: .15rem; }
+.act__desc { font-size: .92rem; line-height: 1.4; margin-top: .4rem; max-width: 46ch; }
+.act__play {
+  display: grid; place-items: center; width: 3.4rem; height: 3.4rem; border-radius: 50%;
+  background: var(--ink); color: var(--paper); transition: background .3s var(--ease);
+}
+.act__play svg { width: 1.3rem; height: 1.3rem; margin-left: .15rem; }
+.act__soon { font: 1.2rem/1 var(--display); text-transform: uppercase; letter-spacing: .05em; color: var(--red); border: 2px solid currentColor; padding: .35rem .65rem; transform: rotate(-6deg); white-space: nowrap; }
+.act--soon .act__thumb img { opacity: .5; }
+
+@media (hover: hover) {
+  a.act__row:hover { transform: translateX(.5rem) rotate(0deg); }
+  a.act__row:hover .act__thumb img { transform: scale(1.1); }
+  a.act__row:hover .act__play { background: var(--red); }
+}
+@media (max-width: 599px) {            /* celular: carimbo/play fica embaixo do titulo, titulo em uma linha */
+  .act__row { grid-template-columns: 4.4rem minmax(0, 1fr); align-items: start; gap: .45rem .9rem; }
+  .act__row > .act__soon, .act__row > .act__play { grid-column: 2; justify-self: start; }
+  .act__play { width: 3rem; height: 3rem; }
+}
+@media (max-width: 380px) {
+  .act__row { grid-template-columns: 4rem minmax(0, 1fr); gap: .4rem .7rem; padding: .95rem .75rem; }
+  .act__title { font-size: 1.95rem; }
+  .act__soon { font-size: 1rem; padding: .25rem .45rem; }
+}
+@media (min-width: 900px) {
+  .stage { padding-top: 6rem; }
+  .act__row { grid-template-columns: 9rem 1fr auto; gap: 1.6rem; padding: 1.2rem 1.6rem; }
+  .act__play { width: 4.2rem; height: 4.2rem; }
+  .act__ato { font-size: 1.5rem; }
+  .beam { width: 42rem; }
+}
+
+/* papel rasgado: o ::before desenha a folha; a forma vem de --torn (gerada no JS) */
+.act__row::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; clip-path: var(--torn, none);
+  background:
+    radial-gradient(ellipse at 15% 20%, oklch(0.8 0.07 80 / .55), transparent 55%),
+    radial-gradient(ellipse at 90% 90%, oklch(0.78 0.08 70 / .5), transparent 50%),
+    var(--paper);
+}
+
+/* ---------- pelicula ---------- */
+.film {
+  position: relative; z-index: 6; height: 4.7rem; margin: -2.3rem -2rem; overflow: hidden;
+  background: oklch(0.1 0.004 50); transform: rotate(-1.6deg);
+  border-block: 1px solid oklch(0.3 0.01 50);
+}
+.film__track { position: relative; display: flex; align-items: center; width: max-content; height: 100%; will-change: transform; }
+.film__track::before, .film__track::after {
+  content: ""; position: absolute; left: 0; right: 0; height: .5rem;
+  background: repeating-linear-gradient(90deg, transparent 0 .4rem, oklch(0.88 0.04 85 / .8) .4rem .95rem, transparent .95rem 1.4rem);
+}
+.film__track::before { top: .38rem; }
+.film__track::after { bottom: .38rem; }
+.frame { flex: none; width: 4.5rem; height: 3rem; margin-inline: .4rem; background: linear-gradient(135deg, oklch(0.5 0.06 70), oklch(0.2 0.02 60)); }
+.frame:nth-child(3n) { background: linear-gradient(135deg, oklch(0.36 0.12 27), oklch(0.18 0.05 27)); }
+.frame:nth-child(5n) { background: linear-gradient(135deg, oklch(0.78 0.15 92), oklch(0.45 0.09 80)); }
+.frame:nth-child(7n) { background: linear-gradient(160deg, oklch(0.62 0.03 80), oklch(0.15 0.01 60)); }
+
+/* ---------- ENCERRAMENTO ---------- */
+.finale { position: relative; overflow: clip; text-align: center; padding: clamp(6rem, 16vw, 11rem) var(--gutter) 3.5rem; min-height: 92svh; display: grid; place-items: center; background: var(--ink); }
+.finale__inner { position: relative; z-index: 10; display: grid; justify-items: center; gap: 1.6rem; }
+.finale h2 { font: 400 clamp(4.4rem, 17vw, 9rem)/.88 var(--display); text-transform: uppercase; color: var(--yellow); }
+.logos { justify-self: center; margin-top: 1.4rem; }
+.logos__img { width: 19rem; max-width: 100%; height: auto; filter: drop-shadow(0 1px 6px oklch(0 0 0 / .45)); }
+.logos__txt { font: 1.5rem/1 var(--display); text-transform: uppercase; color: var(--paper); }
+
+/* telas de computador baixas: encerramento mais compacto para caber inteiro */
+@media (min-width: 900px) and (max-height: 820px) {
+  .finale { padding-top: 5.5rem; padding-bottom: 2.5rem; }
+  .finale__inner { gap: 1rem; }
+  .sprite--projector { width: 10.5rem; }
+  .finale h2 { font-size: clamp(4rem, 11vw, 6.5rem); }
+  .logos { margin-top: .6rem; }
+  .logos__img { width: 15rem; }
+}
+
+/* ---------- spritesheet do projetor ---------- */
+.sprite { background-repeat: no-repeat; width: 100%; }
+.sprite--projector { width: min(15rem, 52vw); aspect-ratio: 1; }
+
+/* ---------- movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .01ms !important; animation: none !important; }
+  .js .stage .curtain { transform: scaleX(var(--open)); }
+}

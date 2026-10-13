@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>O Palco do Tempo — vídeos</title>
+  <meta name="description" content="Os cinco vídeos do projeto O Palco do Tempo, da Fundação Carmélia Maria de Souza.">
+  <meta name="theme-color" content="#7a1616">
+  <meta property="og:title" content="O Palco do Tempo">
+  <meta property="og:description" content="Assista aos cinco vídeos do projeto.">
+  <meta property="og:type" content="website">
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="preload" href="assets/fonts/LeagueGothic-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/Literata-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#videos">Ir direto para os vídeos</a>
+
+  <header class="top">
+    <a class="top__brand" href="#videos">O Palco do Tempo</a>
+  </header>
+
+  <main>
+    <h1 class="sr-only">O Palco do Tempo: vídeos do projeto</h1>
+
+    <!-- VIDEOS: a lista e montada a partir de videos.config.js -->
+    <section class="stage" id="videos" aria-label="Vídeos">
+      <div class="curtain curtain--l" aria-hidden="true"></div>
+      <div class="curtain curtain--r" aria-hidden="true"></div>
+      <div class="beam beam--l" aria-hidden="true"></div>
+      <div class="beam beam--r" aria-hidden="true"></div>
+
+      <ol class="acts" id="acts"></ol>
+      <noscript><p class="noscript">Ative o JavaScript para ver os vídeos.</p></noscript>
+    </section>
+
+    <!-- Faixa de pelicula: desliza com a rolagem -->
+    <div class="film" aria-hidden="true"><div class="film__track" id="filmTrack"></div></div>
+
+    <!-- ENCERRAMENTO -->
+    <section class="finale" id="encerramento" aria-labelledby="fim-t">
+      <div class="curtain curtain--l" aria-hidden="true"></div>
+      <div class="curtain curtain--r" aria-hidden="true"></div>
+
+      <div class="finale__inner">
+        <div class="sprite sprite--projector" data-sprite="assets/sprites/projetor.webp" data-cols="6" data-rows="4" data-frames="24" data-fps="12" data-w="1" data-h="1" hidden aria-hidden="true"></div>
+        <h2 id="fim-t">Cultura<br>é movimento.</h2>
+        <a class="btn btn--ghost magnetic" href="#videos"><span>Voltar aos vídeos</span></a>
+
+        <div class="logos">
+          <img class="logos__img" src="assets/img/logo-fundacao-claro.png" alt="Fundação Carmélia Maria de Souza" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'logos__txt',textContent:'Fundação Carmélia Maria de Souza'}))">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="videos.config.js"></script>
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/vendor/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

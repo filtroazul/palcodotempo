@@ -1,0 +1,10 @@
+docs/
+tools/qr/
+__pycache__/
+*.pyc
+.vercel/
+.env*
+*.pem
+*.key
+Thumbs.db
+desktop.ini
